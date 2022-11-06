@@ -37,7 +37,8 @@ The following still needs to be done within the boilerplate
 2. Make sure the project works with Bitrise for CI/CD
 3. Structure the components into the correct logical architecture
 4. Add types to all the components
-5. ..
+5. Document all the steps you are doing
+6. ..
 
 ---
 
