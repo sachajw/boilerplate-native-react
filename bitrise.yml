@@ -1,0 +1,177 @@
+format_version: "8"
+default_step_lib_source: "https://github.com/bitrise-io/bitrise-steplib.git"
+project_type: react-native
+app:
+  envs:
+    - opts:
+        is_expand: false
+      PROJECT_LOCATION_ANDROID: "."
+    - opts:
+        is_expand: false
+      MODULE: android
+    - opts:
+        is_expand: false
+      VARIANT: all
+    - opts:
+        is_expand: false
+      BITRISE_PROJECT_PATH_ANDROID: android/
+    - opts:
+        is_expand: false
+      BITRISE_EXPORT_METHOD: development
+    - opts:
+        is_expand: false
+      GRADLEW_PATH: android/gradlew
+    - opts:
+        is_expand: false
+      BUILD_GRADLE_PATH: android/build.gradle
+    - opts:
+        is_expand: false
+      BITRISE_BUILD_URL: https://app.bitrise.io/app/c4f7c83ccd869c2c#/builds
+    - opts:
+        is_expand: false
+      ANDROID_HOME: /usr/local/share/android-sdk
+    - opts:
+        is_expand: false
+      SONARCLOUD: https://sonarcloud.io/organizations/yxo3cm759arqofph5pqcvbrw6/projects
+
+trigger_map:
+  - push_branch: "master"
+    workflow: deploy
+  - push_branch: "dev"
+    workflow: dev
+  - pattern: "*"
+    is_pull_request_allowed: true
+    workflow: dev
+
+workflows:
+  send-notifications-dev:
+      steps:
+      - slack@3:
+          title: Slack Dev
+          inputs:
+            - webhook_url: $SLACK_MONEYGRAM
+            - channel: "#moneygram-devops"
+            - message: "ANDROID Dev workflow is passing"
+            - message_on_error: "ANDROID Dev workflow is failing"
+            - emoji: ":confetti_ball:"
+            - emoji_on_error: ":shrug"
+
+  send-notifications-test:
+      steps:
+      - slack@3:
+          title: Slack Test
+          inputs:
+            - webhook_url: $SLACK_MONEYGRAM
+            - channel: "#moneygram-devops"
+            - message: "ANDROID tests are passing. Click here to go to Sonarcloud: $SONARCLOUD"
+            - message_on_error: "ANDROID tests are failing please check for Sonar errors or Jest errors"
+            - emoji: ":confetti_ball:"
+            - emoji_on_error: ":shrug"
+
+  send-notifications-deploy:
+      steps:
+      - slack@3:
+          title: Slack Deploy
+          inputs:
+            - webhook_url: $SLACK_MONEYGRAM
+            - channel: "#moneygram-devops"
+            - message: "ANDROID: Test the changes on the latest ANDROID build. Click here to download the build: https://app.bitrise.io/artifact/"
+            - message_on_error: "ANDROID: Click here to find out why the ANDROID build failed: $BITRISE_BUILD_URL"
+            - emoji: ":confetti_ball:"
+            - emoji_on_error: ":shrug"
+
+  setup:
+    steps:
+      - script@1:
+          title: Install Java 11
+          inputs:
+            - content: |-
+                brew update >/dev/null
+                brew install openjdk@11
+                sudo ln -sfn /usr/local/opt/openjdk@11/libexec/openjdk.jdk /Library/Java/JavaVirtualMachines/openjdk-11.jdk
+                echo 'export PATH="/usr/local/opt/openjdk@11/bin:$PATH"' >> ~/.zshrc
+                echo export CPPFLAGS="-I/usr/local/opt/openjdk@11/include"
+                java -version
+      - install-react-native@0: {}
+      - avd-manager@1: {}
+      - activate-ssh-key@4:
+          title: Activate SSH Key
+          run_if: '{{getenv "SSH_RSA_PRIVATE_KEY" | ne ""}}'
+      - git-clone@4: {}
+      - cache-pull@2: {}
+      - yarn@0:
+          title: Yarn Install
+          inputs:
+            - cache_local_deps: "yes"
+            - verbose_log: "yes"
+            - command: install
+
+  dev:
+    before_run:
+      - setup
+    envs:
+      - ANDROID_HOME: /usr/local/share/android-sdk
+    steps:
+      - script@1:
+          title: Make build.gradle and gradlew executable
+          inputs:
+            - content: |-
+                #!/usr/bin/env bash
+                # fail if any commands fails
+                set -e
+                # debug log
+                set -x
+                # write your script here
+                chmod +x $GRADLEW_PATH
+                chmod +x $BUILD_GRADLE_PATH
+      - install-missing-android-tools@2:
+          title: Install Missing Android Tools
+          inputs:
+            - gradlew_path: $BUILD_GRADLE_PATH
+      - wait-for-android-emulator@1: {}
+      - yarn@0:
+          title: Yarn Android
+          inputs:
+            - cache_local_deps: "yes"
+            - verbose_log: "yes"
+            - command: android
+    after_run:
+      - send-notifications-dev
+
+  test:
+    before_run:
+      - dev
+    steps:
+      - yarn@0:
+          title: Yarn Test with Jest
+          inputs:
+            - cache_local_deps: "yes"
+            - verbose_log: "yes"
+            - command: test
+      # uses sonar-project.properties
+      - sonarqube-scanner@1: {}
+    after_run:
+      - send-notifications-test
+
+  deploy:
+    before_run:
+      - test
+    envs:
+      - ANDROID_HOME: /usr/local/share/android-sdk
+    steps:
+      - cache-pull@2: {}
+      - android-build@0:
+          title: Android Build
+          inputs:
+            - project_location: $BITRISE_PROJECT_PATH_ANDROID
+      - virtual-device-testing-for-android@1: {}
+      - certificate-and-profile-installer@1: {}
+      - set-android-manifest-versions@1:
+          inputs:
+            - version_name: '1.0.1'
+            - version_code_offset: '1'
+            - manifest_file: android/app/src/main/AndroidManifest.xml
+      - deploy-to-bitrise-io@1.10: {}
+      - cache-push@2: {}
+    after_run:
+      - send-notifications-deploy

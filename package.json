@@ -1,0 +1,75 @@
+{
+  "name": "ReNativeBoilerplate",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start &>/dev/null &",
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+  },
+  "dependencies": {
+    "@react-native-community/masked-view": "^0.1.10",
+    "@react-navigation/bottom-tabs": "^5.8.0",
+    "@react-navigation/drawer": "^5.9.0",
+    "@react-navigation/native": "^5.7.3",
+    "@react-navigation/stack": "^5.9.0",
+    "flat": "^5.0.2",
+    "got": "^11.8.0",
+    "react": "16.13.1",
+    "react-native": "0.63.2",
+    "react-native-gesture-handler": "^1.8.0",
+    "react-native-ionicons": "^4.6.5",
+    "react-native-reanimated": "^1.13.0",
+    "react-native-safe-area-context": "^3.1.7",
+    "react-native-screens": "^2.10.1",
+    "react-native-vector-icons": "^7.0.0",
+    "react-native-webview": "^10.9.2",
+    "react-animation": "latest",
+    "react-dom": "^15.0.0",
+    "rxjs": "^6.6.3",
+    "yargs-unparser": "2.0.0"
+
+  },
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/preset-env": "7.8.4",
+    "@babel/runtime": "^7.8.4",
+    "@babel/runtime-corejs3": "7.11.2",
+    "@react-native-community/eslint-config": "^1.1.0",
+    "@types/jest": "^25.2.3",
+    "@types/react-native": "^0.63.2",
+    "@types/react-native-vector-icons": "^6.4.5",
+    "@types/react-test-renderer": "^16.9.2",
+    "@typescript-eslint/eslint-plugin": "^2.27.0",
+    "@typescript-eslint/parser": "^2.27.0",
+    "jest-environment-node": "25.0.0",
+    "mocha": "^8.1.3",
+    "babel-jest": "^25.1.0",
+    "detox": "^17.8.1",
+    "eslint": "^6.5.1",
+    "jest": "^26.5.0",
+    "jest-circus": "26.4.x",
+    "metro-react-native-babel-preset": "^0.59.0",
+    "mkdirp": "^1.0.4",
+    "prettier": "^2.0.4",
+    "react-test-renderer": "16.13.1",
+    "typescript": "^3.8.3"
+  },
+
+  "jest": {
+  "preset": "react-native",
+  "setupFiles": ["./e2e/jest.setup.js"],
+  "transformIgnorePatterns": [ "node_modules/(?!react-native|react-navigation)/" ],
+  "moduleNameMapper": { "^React$": "./e2e/assetsTransformer.js" },
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js",
+    "jsx",
+    "json",
+    "node"
+    ]
+  }
+}
