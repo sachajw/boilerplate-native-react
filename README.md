@@ -1,4 +1,4 @@
-**Responsive React Native Boilerplate (work in progress)**
+**React Native Boilerplate (work in progress)**
 
 ---
 
