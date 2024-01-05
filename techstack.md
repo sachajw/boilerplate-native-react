@@ -1,7 +1,8 @@
 <!--
---- Readme.md Snippet without images Start ---
+&lt;--- Readme.md Snippet without images Start ---&gt;
 ## Tech Stack
 sachajw/boilerplate-native-react is built on the following main stack:
+
 - [Jest](http://facebook.github.io/jest/) – Javascript Testing Framework
 - [Mocha](http://mochajs.org/) – Javascript Testing Framework
 - [Gradle](https://www.gradle.org/) – Java Build Tools
@@ -23,11 +24,13 @@ sachajw/boilerplate-native-react is built on the following main stack:
 - [GitHub Actions](https://github.com/features/actions) – Continuous Integration
 
 Full tech stack [here](/techstack.md)
---- Readme.md Snippet without images End ---
 
---- Readme.md Snippet with images Start ---
+&lt;--- Readme.md Snippet without images End ---&gt;
+
+&lt;--- Readme.md Snippet with images Start ---&gt;
 ## Tech Stack
 sachajw/boilerplate-native-react is built on the following main stack:
+
 - <img width='25' height='25' src='https://img.stackshare.io/service/830/jest.png' alt='Jest'/> [Jest](http://facebook.github.io/jest/) – Javascript Testing Framework
 - <img width='25' height='25' src='https://img.stackshare.io/service/832/mocha.png' alt='Mocha'/> [Mocha](http://mochajs.org/) – Javascript Testing Framework
 - <img width='25' height='25' src='https://img.stackshare.io/service/975/gradlephant-social-black-bg.png' alt='Gradle'/> [Gradle](https://www.gradle.org/) – Java Build Tools
@@ -49,14 +52,15 @@ sachajw/boilerplate-native-react is built on the following main stack:
 - <img width='25' height='25' src='https://img.stackshare.io/service/11563/actions.png' alt='GitHub Actions'/> [GitHub Actions](https://github.com/features/actions) – Continuous Integration
 
 Full tech stack [here](/techstack.md)
---- Readme.md Snippet with images End ---
+
+&lt;--- Readme.md Snippet with images End ---&gt;
 -->
 <div align="center">
 
 # Tech Stack File
 ![](https://img.stackshare.io/repo.svg "repo") [sachajw/boilerplate-native-react](https://github.com/sachajw/boilerplate-native-react)![](https://img.stackshare.io/public_badge.svg "public")
 <br/><br/>
-|41<br/>Tools used|11/16/23 <br/>Report generated|
+|41<br/>Tools used|01/05/24 <br/>Report generated|
 |------|------|
 </div>
 
